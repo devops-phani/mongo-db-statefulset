@@ -5,6 +5,8 @@
     openssl rand -base64 741 > key.txt
     kubectl create secret generic shared-bootstrap-data --from-file=internal-auth-mongodb-keyfile=key.txt
 
+# Deploy the mongodb using below yaml file
+
     apiVersion: apps/v1
     kind: StatefulSet
     metadata:
