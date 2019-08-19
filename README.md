@@ -1,5 +1,37 @@
 # mongo-db-statefulset
     # Ref https://maruftuhin.com/blog/mongodb-replica-set-on-kubernetes/
+# Create the Storage class
+
+    kind: StorageClass
+    apiVersion: storage.k8s.io/v1
+    metadata:
+      name: standard
+      annotations:
+        storageclass.beta.kubernetes.io/is-default-class: "true"
+    provisioner: kubernetes.io/aws-ebs
+    parameters:
+      type: gp2
+      fsType: ext4
+    reclaimPolicy: Retain
+    allowVolumeExpansion: true
+    mountOptions:
+      - debug
+
+# Deploy the mongodb-service
+
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: mongodb-service
+      labels:
+        name: mongo
+    spec:
+      ports:
+      - port: 27017
+        targetPort: 27017
+      clusterIP: None
+      selector:
+        role: mongo
 
 
 # Deploy the mongodb using below yaml file
