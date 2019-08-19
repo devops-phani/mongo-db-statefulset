@@ -86,15 +86,25 @@
 
       kubectl get pvc
 
-      kubectl edit pvc mongodb-persistent-storage-claim-mongod-1
+      kubectl edit pvc mongodb-persistent-storage-claim-mongod-0
       
       kubectl get pv
       
       kubectl get pods
       
+      # Switch the primary to secondary 
+      # Run below query in Primary instance
+        cfg = rs.conf()
+        cfg.members[0].priority = 0.5
+        cfg.members[1].priority = 1
+        cfg.members[2].priority = 0.5
+        rs.reconfig(cfg)
+      
+      # Now mongod-1 become as primary then delete the mongod-0 pod
+      
       # Delete the pod it will create new pod with same name and added to additional storage to the pod
       
-      kubectl delete pod mongod-1 
+      kubectl delete pod mongod-0 
       
       # Do same things to all pods once all pods get updated storage , update the statefulset volumetemplate 
         it won't allow to update storage so delete the statefulset without deleting the pods.
