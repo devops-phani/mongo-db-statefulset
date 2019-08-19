@@ -16,6 +16,8 @@
     allowVolumeExpansion: true
     mountOptions:
       - debug
+# Check the storage class list
+     kubectl get sc
 
 # Deploy the mongodb-service
 
@@ -32,9 +34,11 @@
       clusterIP: None
       selector:
         role: mongo
+# Get the service list
 
+    kubectl get svc
 
-# Deploy the mongodb using below yaml file
+# Deploy the mongodb statefulset
 
     apiVersion: apps/v1
     kind: StatefulSet
@@ -85,9 +89,11 @@
           resources:
             requests:
               storage: 1Gi
-
+# Get the statefulset list
+     kubectl get sts
 
 # Add Pods to Cluster
+      kubectl get pods 
 
      kubectl exec -it mongod-0 -c mongod-container bash
 
