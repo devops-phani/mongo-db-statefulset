@@ -1,5 +1,5 @@
 # mongo-db-statefulset
-# Ref https://maruftuhin.com/blog/mongodb-replica-set-on-kubernetes/
+    # Ref https://maruftuhin.com/blog/mongodb-replica-set-on-kubernetes/
 
 
 # Deploy the mongodb using below yaml file
