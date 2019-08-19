@@ -1,9 +1,6 @@
 # mongo-db-statefulset
 # Ref https://maruftuhin.com/blog/mongodb-replica-set-on-kubernetes/
 
-# MongoDB will use this key to communicate internal cluster.
-    openssl rand -base64 741 > key.txt
-    kubectl create secret generic shared-bootstrap-data --from-file=internal-auth-mongodb-keyfile=key.txt
 
 # Deploy the mongodb using below yaml file
 
@@ -28,7 +25,7 @@
         spec:
           containers:
           - name: mongod-container
-            image: mongo:3.4
+            image: mongo
             command:
             - "numactl"
             - "--interleave=all"
@@ -37,13 +34,6 @@
             - "0.0.0.0"
             - "--replSet"
             - "MainRepSet"
-            - "--auth"
-            - "--clusterAuthMode"
-            - "keyFile"
-            - "--keyFile"
-            - "/etc/secrets-volume/internal-auth-mongodb-keyfile"
-            - "--setParameter"
-            - "authenticationMechanisms=SCRAM-SHA-1"
             resources:
               requests:
                 cpu: 0.2
@@ -51,21 +41,13 @@
             ports:
             - containerPort: 27017
             volumeMounts:
-            - name: secrets-volume
-              readOnly: true
-              mountPath: /etc/secrets-volume
             - name: mongodb-persistent-storage-claim
               mountPath: /data/db
-          volumes:
-          - name: secrets-volume
-            secret:
-              secretName: shared-bootstrap-data
-              defaultMode: 256
       volumeClaimTemplates:
       - metadata:
           name: mongodb-persistent-storage-claim
           annotations:
-            volume.beta.kubernetes.io/storage-class: "gp2"
+            volume.beta.kubernetes.io/storage-class: "standard"
         spec:
           accessModes: [ "ReadWriteOnce" ]
           resources:
