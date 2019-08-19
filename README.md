@@ -100,6 +100,8 @@
         cfg.members[2].priority = 0.5
         rs.reconfig(cfg)
       
+      # Ref https://docs.mongodb.com/manual/tutorial/force-member-to-be-primary/
+      
       # Now mongod-1 become as primary then delete the mongod-0 pod
       
       # Delete the pod it will create new pod with same name and added to additional storage to the pod
