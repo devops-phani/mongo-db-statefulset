@@ -47,6 +47,9 @@
     spec:
       serviceName: mongodb-service
       replicas: 3
+    #  podManagementPolicy: Parallel
+      updateStrategy:
+        type: RollingUpdate
       selector:
         matchLabels:
           role: mongo
@@ -59,6 +62,7 @@
             environment: test
             replicaset: MainRepSet
         spec:
+          terminationGracePeriodSeconds: 30
           containers:
           - name: mongod-container
             image: mongo
@@ -76,6 +80,24 @@
                 memory: 200Mi
             ports:
             - containerPort: 27017
+            readinessProbe:
+              tcpSocket:
+    #          httpGet:
+    #            path: /
+                port: 27017
+              initialDelaySeconds: 10
+              timeoutSeconds: 1
+              periodSeconds: 5
+              successThreshold: 1
+            livenessProbe:
+              tcpSocket:
+    #          httpGet:
+    #            path: /
+                port: 27017
+              initialDelaySeconds: 10
+              timeoutSeconds: 1
+              periodSeconds: 2
+              failureThreshold: 3
             volumeMounts:
             - name: mongodb-persistent-storage-claim
               mountPath: /data/db
@@ -89,6 +111,7 @@
           resources:
             requests:
               storage: 1Gi
+
 # Get the statefulset list
      kubectl get sts
 
