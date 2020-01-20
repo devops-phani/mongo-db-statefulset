@@ -101,7 +101,6 @@
       volumeClaimTemplates:
       - metadata:
           name: mongodb-persistent-storage-claim
-          annotations:
         spec:
           accessModes: [ "ReadWriteOnce" ]
           storageClassName: standard
