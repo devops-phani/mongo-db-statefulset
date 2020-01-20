@@ -10,6 +10,7 @@
         storageclass.beta.kubernetes.io/is-default-class: "true"
     provisioner: kubernetes.io/aws-ebs
     parameters:
+      zones: us-east-2b
       type: gp2
       fsType: ext4
     reclaimPolicy: Retain
@@ -82,8 +83,6 @@
             - containerPort: 27017
             readinessProbe:
               tcpSocket:
-    #          httpGet:
-    #            path: /
                 port: 27017
               initialDelaySeconds: 10
               timeoutSeconds: 1
@@ -91,8 +90,6 @@
               successThreshold: 1
             livenessProbe:
               tcpSocket:
-    #          httpGet:
-    #            path: /
                 port: 27017
               initialDelaySeconds: 10
               timeoutSeconds: 1
@@ -105,9 +102,9 @@
       - metadata:
           name: mongodb-persistent-storage-claim
           annotations:
-            volume.beta.kubernetes.io/storage-class: "standard"
         spec:
           accessModes: [ "ReadWriteOnce" ]
+          storageClassName: standard
           resources:
             requests:
               storage: 1Gi
