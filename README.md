@@ -156,7 +156,10 @@
         cfg.members[1].priority = 1
         cfg.members[2].priority = 0.5
         rs.reconfig(cfg)
-      
+        
+      # Check members prority
+       rs.conf()['members']
+       
       # Ref https://docs.mongodb.com/manual/tutorial/force-member-to-be-primary/
       
       # Now mongod-1 become as primary then delete the mongod-0 pod
